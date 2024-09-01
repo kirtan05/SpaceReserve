@@ -2,7 +2,6 @@ import { Client as Styletron } from "styletron-engine-monolithic";
 import { Provider as StyletronProvider } from "styletron-react";
 import {  BaseProvider, styled, DarkTheme } from "baseui";
 import { Home } from "./Home";
-import { VenueSelect } from "./venues/VenueSelect";
 const engine = new Styletron();
 
 const Centered = styled("div", {
