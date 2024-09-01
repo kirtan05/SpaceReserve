@@ -1,8 +1,10 @@
 // constants.js
 
 export const Venues = {
-    VENUE_A: 'Venue A',
-    VENUE_B: 'Venue B',
-    VENUE_C: 'Venue C',
+    exhibitionRoom: 'Exhibition Room',
+    festRoom: 'Fest Room',
+    multipurposeHall: 'Multipurpose Hall',
+    nssRooom: "NSS Room",
+    hoscaRoom: "HOSCA ROOM (SAC)"
   };
   
