@@ -7,14 +7,15 @@ generator client {
   provider = "prisma-client-js"
 }
 
-
 type booking {
-  id      String   
+  email String
   bookingTime DateTime @default(now())
   startTime DateTime 
   endTime DateTime
   approvalStatus String
-  reason String 
+  venue String
+  reason String
+  expectedStrength String 
 }
 
 model Booking {
@@ -22,9 +23,10 @@ model Booking {
   booking booking
 }
 model User {
-  id      String   @id @default(auto()) @map("_id") @db.ObjectId
-  email   String   @unique
-  name    String?
-  role    String
-  bookings booking[]
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  email        String   @unique
+  name         String?
+  role         String
+  approverEmail String  
 }
+

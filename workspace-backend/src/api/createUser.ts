@@ -3,17 +3,20 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export const newBookingHandler = async (req: Request, res: Response) => {
-  const { booking } = req.body;
+export const createUserHandler = async (req: Request, res: Response) => {
+  const { email, name, role, approverEmail } = req.body;
 
   try {
-    const newBooking = await prisma.booking.create({
+    const newUser = await prisma.user.create({
       data: {
-        booking,
+        email,
+        name,
+        role,
+        approverEmail,  
       },
     });
 
-    res.status(201).json(newBooking);
+    res.status(201).json(newUser);
   } catch (error) {
     console.error('Error creating user:', error);
     res.status(500).json({ error: 'An error occurred while creating the user.' });
