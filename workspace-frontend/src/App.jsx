@@ -16,7 +16,10 @@ export default function App() {
     <StyletronProvider value={engine}>
       <BaseProvider theme={DarkTheme}>
         <Centered>
+        <div className="flex justify-center items-center h-screen bg-gray-800">
+
          <Home/>
+         </div>
         </Centered>
       </BaseProvider>
     </StyletronProvider>
