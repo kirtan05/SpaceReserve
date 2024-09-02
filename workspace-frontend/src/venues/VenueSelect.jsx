@@ -1,12 +1,10 @@
-import React, { useState } from 'react';
-import { Select } from 'baseui/select'; // Correct import for baseui
+import React from 'react';
+import { Select } from 'baseui/select';
 import { Venues } from './constants';
 
-export const VenueSelect = () => {
-  const [selectedVenue, setSelectedVenue] = useState('');
-
+export const VenueSelect = ({ selectedVenue, onVenueChange }) => {
   const handleChange = (event) => {
-    setSelectedVenue(event.value);
+    onVenueChange(event.value);
   };
 
   return (
@@ -22,4 +20,3 @@ export const VenueSelect = () => {
     />
   );
 };
-
