@@ -7,7 +7,7 @@ generator client {
   provider = "prisma-client-js"
 }
 
-type booking {
+ type booking {
   email String
   bookingTime DateTime @default(now())
   startTime DateTime 
@@ -15,7 +15,7 @@ type booking {
   approvalStatus String
   venue String
   reason String
-  expectedStrength String 
+  expectedStrength String   
 }
 
 model Booking {
