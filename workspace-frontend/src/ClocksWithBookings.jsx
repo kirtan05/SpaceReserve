@@ -15,13 +15,22 @@ export const ClockWithBookings = ({ bookings }) => {
     return { x, y };
   };
 
+  const convertTo12HourFormat = (dateTime) => {
+    const date = new Date(dateTime);
+    let hour = date.getHours();
+    const minute = date.getMinutes();
+    const period = hour >= 12 ? 'PM' : 'AM';
+    hour = hour % 12 || 12; // Convert 0 hour to 12 for midnight/noon
+    return { hour, minute, period };
+  };
+
   const renderSectors = () => {
     return bookings.map((booking, index) => {
-      const [startHour, startMinute] = booking.start.split(":").map(Number);
-      const [endHour, endMinute] = booking.end.split(":").map(Number);
+      const start = convertTo12HourFormat(booking.startTime);
+      const end = convertTo12HourFormat(booking.endTime);
 
-      const startCoords = getClockCoordinates(startHour, startMinute);
-      const endCoords = getClockCoordinates(endHour, endMinute);
+      const startCoords = getClockCoordinates(start.hour, start.minute);
+      const endCoords = getClockCoordinates(end.hour, end.minute);
 
       return (
         <Popover
@@ -49,7 +58,7 @@ export const ClockWithBookings = ({ bookings }) => {
                 }}
               >
                 <FaClock style={{ marginRight: '6px' }} />
-                {booking.start} - {booking.end}
+                {`${start.hour}:${String(start.minute).padStart(2, '0')} ${start.period}`} - {`${end.hour}:${String(end.minute).padStart(2, '0')} ${end.period}`}
               </ParagraphSmall>
               <ParagraphSmall style={{ color: 'white' }}>{booking.reason}</ParagraphSmall>
             </Block>

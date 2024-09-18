@@ -12,41 +12,37 @@ type BookingWhereInput = {
     reason: String,
     expectedStrength: String 
   };
-
-export const getBookingHandler = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    console.log(req);
-    // Extract venue and date from request query parameters
-    const venue = req.body.venue as string;
-    const date = req.body.date as string;
-    console.log(venue,date);
-    // Validate parameters
-    if (!venue || !date) {
-      return res.status(400).json({ error: 'Venue and date are required' });
+  export const getBookingHandler = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const venue = req.query.venue as string;
+      const date = req.query.date as string;
+  
+      if (!venue || !date) {
+        return res.status(400).json({ error: 'Venue and date are required' });
+      }
+  
+      // Parse the date components manually
+      const [year, month, day] = date.split('-').map(Number);
+  
+      // Create startOfDay and endOfDay in UTC
+      const startOfDay = new Date(Date.UTC(year, month - 1, day, 0, 0, 0));
+      const endOfDay = new Date(Date.UTC(year, month - 1, day, 23, 59, 59, 999));
+      console.log(venue , startOfDay, date);
+      // Query the database for bookings within the UTC range
+      const bookings = await prisma.booking.findMany({
+        where: {
+          venue: venue,
+          startTime: {
+            gte: startOfDay,
+            lt: endOfDay,
+          },
+        },
+      });
+  
+      res.json(bookings);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'An error occurred while fetching bookings' });
     }
-
-    // Parse the date
-    const startOfDay = new Date(date);
-    const endOfDay = new Date(date);
-    endOfDay.setDate(endOfDay.getDate() + 1);
-
-    // Query the database for bookings
-    console.log(date);
-    const bookings = await prisma.booking.findMany();
-
-    const filteredBookings = bookings.filter(booking => 
-      booking.booking.venue === venue &&
-      booking.booking.bookingTime >= startOfDay &&
-      booking.booking.bookingTime < endOfDay
-    );
-    
-      
-
-    // Return the bookings
-    res.json(filteredBookings);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'An error occurred while fetching bookings' });
-  }
-};
-
+  };
+  

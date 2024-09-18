@@ -19,7 +19,7 @@ export default function App() {
         <div className="flex justify-center items-center h-screen bg-gray-800">
 
          <Home/>
-         </div>
+         </div   >
         </Centered>
       </BaseProvider>
     </StyletronProvider>
