@@ -9,47 +9,63 @@ import {
   DisplayMedium,
 } from "baseui/typography";
 
+import { useEffect } from 'react';
+
 export const Home = () => {
   const [selectedVenue, setSelectedVenue] = useState('');
   const [displayDate, setDisplayDate] = useState([new Date()]);
 
   const handleVenueChange = (venue) => {
     setSelectedVenue(venue);
-    sendQuery(venue, displayDate);
   };
 
   const handleDateChange = (date) => {
     setDisplayDate(date);
-    sendQuery(selectedVenue, date);
   };
 
-  useEffect(() => {
-    console.log("check");
-    if (!selectedVenue || !selectedDate) return;
+  const apiUrl = process.env.BACKEND_URL;
 
+    useEffect(() => {
+    // Check if the selectedVenue and displayDate exist
+    if (!selectedVenue || !displayDate) return;
+
+    // Extract venue ID and format the date
     const venueId = selectedVenue.id;
-    const formattedDate = selectedDate[0].toISOString().split('T')[0]; // Format the date as yyyy-mm-dd
+    const formattedDate = displayDate[0].toISOString().split('T')[0]; // Format the date as yyyy-mm-dd
 
-    const query = new URLSearchParams({ venue: venueId, date: formattedDate }).toString();
+    // Prepare the query object
+    const query = {
+        venue: venueId,
+        date: formattedDate,
+    };
 
-    fetch(`/api/getBookings?${query}`, {
-      method: 'GET',
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+    const fetchBookings = async () => {
+        try {
+            const response = await fetch(`${apiUrl}/getBookings`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(query),
+            });
+
+            // Check if the response is OK
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            // Parse and handle the response data
+            const data = await response.json();
+            setBookings(data);
+            console.log('Bookings:', data);
+        } catch (error) {
+            console.error('Fetch error:', error);
         }
-        return response.json();
-      })
-      .then((data) => {
-        setBookings(data); // Update state with the received bookings
-        console.log('Bookings:', data);
-      })
-      .catch((error) => {
-        console.error('There was a problem with the fetch operation:', error);
-      });
-  }, [selectedVenue, selectedDate]); // Re-run when venue or date changes
-  
+    };
+
+    fetchBookings();
+}, [selectedVenue, displayDate]);
+
   return (
     <Block
       display="flex"
