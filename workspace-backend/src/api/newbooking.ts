@@ -4,18 +4,25 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export const newBookingHandler = async (req: Request, res: Response) => {
-  const { booking } = req.body;
+  const { email, bookingTime, startTime, endTime, approvalStatus, venue, reason, expectedStrength } = req.body;
 
   try {
     const newBooking = await prisma.booking.create({
       data: {
-        booking,
+        email,
+        bookingTime: new Date(bookingTime),
+        startTime: new Date(startTime),
+        endTime: new Date(endTime),
+        approvalStatus,
+        venue,
+        reason,
+        expectedStrength,
       },
     });
 
     res.status(201).json(newBooking);
   } catch (error) {
-    console.error('Error creating user:', error);
-    res.status(500).json({ error: 'An error occurred while creating the user.' });
+    console.error('Error creating booking:', error);
+    res.status(500).json({ error: 'An error occurred while creating the booking.' });
   }
 };

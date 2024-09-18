@@ -8,7 +8,7 @@ import { Input } from 'baseui/input';
 import { Block } from 'baseui/block';
 import axios from 'axios';
 
-export const BookingButton = () => {
+export  const BookingButton = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [date, setDate] = useState([new Date(), new Date()]); // Date range
   const [startTime, setStartTime] = useState(new Date());

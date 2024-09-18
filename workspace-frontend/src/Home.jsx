@@ -1,17 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Block } from 'baseui/block';
 import { VenueSelect } from './venues/VenueSelect';
 import { ClockWithBookings } from './ClocksWithBookings';
 import { BookingButton } from './components/BookingButton';
-import { DateClock } from './components/DateClock';
-import { mockBookings } from './venues/constants';
-import {
-  DisplayLarge,
-  DisplayMedium,
-  DisplaySmall,
-  DisplayXSmall,
-} from "baseui/typography";
+import { DisplayMedium } from "baseui/typography";
+
 export const Home = () => {
+  const [bookings, setBookings] = useState([]);
+
+  const handleBookingsFetched = (fetchedBookings) => {
+    setBookings(fetchedBookings);
+  };
+
   return (
     <Block
       display="flex"
@@ -30,9 +30,9 @@ export const Home = () => {
       >
         Welcome to the Home Page
       </Block>
-      <VenueSelect />
+      <VenueSelect onBookingsFetched={handleBookingsFetched} />
       <Block marginBottom="1rem"></Block>
-      <DateClock />
+      {/* <DateClock /> */}
       <Block
         display="flex"
         flexDirection="row"
@@ -41,43 +41,47 @@ export const Home = () => {
         marginBottom="0rem"
         width="100%"
       >
-        <Block>        <DisplayMedium
-          overrides={{
-            Block: {
-              style: {
-                color: '#000000', // Black color
-                fontSize: '1rem', // Adjust size as needed
-                textAlign: 'center', // Center align text
-                marginBottom :'-2rem',
+        <Block>        
+          <DisplayMedium
+            overrides={{
+              Block: {
+                style: {
+                  color: '#000000',
+                  fontSize: '1rem',
+                  textAlign: 'center',
+                  marginBottom: '-2rem',
+                },
               },
-            },
-          }}
-        >
-          AM
-        </DisplayMedium>
-        <ClockWithBookings bookings={mockBookings} /></Block>
+            }}
+          >
+            AM
+          </DisplayMedium>
+          <ClockWithBookings bookings={bookings} />
+        </Block>
         
         <Block marginLeft="1rem">
-        <Block>
-        <DisplayMedium
-          overrides={{
-            Block: {
-              style: {
-                color: '#000000', // Black color
-                fontSize: '1rem', // Adjust size as needed
-                textAlign: 'center', // Center align text
-                marginBottom :'-2rem',
-              },
-            },
-          }}
-        >
-          PM
-        </DisplayMedium>
-        <ClockWithBookings bookings={mockBookings} />
-        </Block>
+          <Block>
+            <DisplayMedium
+              overrides={{
+                Block: {
+                  style: {
+                    color: '#000000',
+                    fontSize: '1rem',
+                    textAlign: 'center',
+                    marginBottom: '-2rem',
+                  },
+                },
+              }}
+            >
+              PM
+            </DisplayMedium>
+            <ClockWithBookings bookings={bookings} />
+          </Block>
         </Block>
       </Block>
       <BookingButton />
     </Block>
+    
+
   );
 };
