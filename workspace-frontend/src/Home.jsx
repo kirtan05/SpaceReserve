@@ -22,49 +22,55 @@ export const Home = () => {
   const handleDateChange = (date) => {
     setDisplayDate(date);
   };
+  const [bookings, setBookings] = useState([]);
+
+  const handleBookingsFetched = (fetchedBookings) => {
+    setBookings(fetchedBookings);
+  };
+
 
   const apiUrl = process.env.BACKEND_URL;
 
-    useEffect(() => {
-    // Check if the selectedVenue and displayDate exist
-    if (!selectedVenue || !displayDate) return;
+//     useEffect(() => {
+//     // Check if the selectedVenue and displayDate exist
+//     if (!selectedVenue || !displayDate) return;
 
-    // Extract venue ID and format the date
-    const venueId = selectedVenue.id;
-    const formattedDate = displayDate[0].toISOString().split('T')[0]; // Format the date as yyyy-mm-dd
+//     // Extract venue ID and format the date
+//     const venueId = selectedVenue.id;
+//     const formattedDate = displayDate[0].toISOString().split('T')[0]; // Format the date as yyyy-mm-dd
 
-    // Prepare the query object
-    const query = {
-        venue: venueId,
-        date: formattedDate,
-    };
+//     // Prepare the query object
+//     const query = {
+//         venue: venueId,
+//         date: formattedDate,
+//     };
 
-    const fetchBookings = async () => {
-        try {
-            const response = await fetch(`${apiUrl}/getBookings`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(query),
-            });
+//     const fetchBookings = async () => {
+//         try {
+//             const response = await fetch(`${apiUrl}/getBookings`, {
+//                 method: 'POST',
+//                 headers: {
+//                     'Content-Type': 'application/json',
+//                 },
+//                 body: JSON.stringify(query),
+//             });
 
-            // Check if the response is OK
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
+//             // Check if the response is OK
+//             if (!response.ok) {
+//                 throw new Error(`HTTP error! status: ${response.status}`);
+//             }
 
-            // Parse and handle the response data
-            const data = await response.json();
-            setBookings(data);
-            console.log('Bookings:', data);
-        } catch (error) {
-            console.error('Fetch error:', error);
-        }
-    };
+//             // Parse and handle the response data
+//             const data = await response.json();
+//            // setBookings(data);
+//             console.log('Bookings:', data);
+//         } catch (error) {
+//             console.error('Fetch error:', error);
+//         }
+//     };
 
-    fetchBookings();
-}, [selectedVenue, displayDate]);
+//     fetchBookings();
+// }, [selectedVenue, displayDate]);
 
   return (
     <Block
@@ -84,9 +90,9 @@ export const Home = () => {
       >
         Welcome to the Home Page
       </Block>
-      <VenueSelect selectedVenue={selectedVenue} onVenueChange={handleVenueChange} />
+      <VenueSelect onBookingsFetched={handleBookingsFetched} />
       <Block marginBottom="1rem"></Block>
-      <DateClock displayDate={displayDate} onDateChange={handleDateChange} />
+      {/* <DateClock displayDate={displayDate} onDateChange={handleDateChange} /> */}
       <Block
         display="flex"
         flexDirection="row"

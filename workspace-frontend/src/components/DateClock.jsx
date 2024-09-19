@@ -1,18 +1,13 @@
 import React from 'react';
-import { DatePicker } from "baseui/datepicker";
-import { SIZE } from "baseui/input";
+import { DatePicker } from 'baseui/datepicker';
 
-export const DateClock = ({ displayDate, onDateChange }) => {
-  const handleChange = ({ date }) => {
-    onDateChange(Array.isArray(date) ? date : [date]);
-  };
-
+export const DateClock = ({ value, onDateChange }) => {
   return (
     <DatePicker
-      value={displayDate}
-      onChange={handleChange}
-      size={SIZE.default}
-      displayValueAtRangeIndex={0}
+      value={value}
+      onChange={({ date }) => {
+        onDateChange({ date });
+      }}
     />
   );
 };

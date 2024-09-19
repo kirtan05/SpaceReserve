@@ -12,29 +12,45 @@ export const VenueSelect = ({ onBookingsFetched }) => {
   };
 
   const handleDateChange = ({ date }) => {
-    setSelectedDate(Array.isArray(date) ? date : [date]);
+    if (Array.isArray(date)) {
+      setSelectedDate(date);  // Ensure the date is an array
+    } else if (date instanceof Date) {
+      setSelectedDate([date]);  // Convert single date to an array
+    }
+    console.log("Selected date:", date);  // Log the selected date to verify it's valid
   };
 
   const fetchBookings = async () => {
-    if (selectedVenue && selectedDate) {
-      const formattedDate = selectedDate[0].toISOString().split('T')[0]; // Format date as 'YYYY-MM-DD'
-      const venue = selectedVenue[0].label; // Assuming you need the venue label
-  
+    if (selectedVenue && selectedDate[0]) {
+      const formattedDate = selectedDate[0].toISOString().split('T')[0];
+      const venue = selectedVenue[0]?.label;
+
+      if (!venue) {
+        console.error('No venue selected');
+        return;
+      }
+
       const url = `http://localhost:8500/api/getBookings?venue=${encodeURIComponent(venue)}&date=${formattedDate}`;
-      
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      
-      const data = await response.json();
-      console.log(data);
-      onBookingsFetched(data); // Pass the fetched bookings to parent component
+
+      try {
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        onBookingsFetched(data);
+      } catch (error) {
+        console.error('Fetch error:', error);
+      }
     }
   };
-  
 
   React.useEffect(() => {
     fetchBookings();
@@ -52,7 +68,7 @@ export const VenueSelect = ({ onBookingsFetched }) => {
           value: value,
         }))}
       />
-      <DateClock value={selectedDate} onChange={handleDateChange} />
+      <DateClock value={selectedDate[0]} onDateChange={handleDateChange} />
     </div>
   );
 };

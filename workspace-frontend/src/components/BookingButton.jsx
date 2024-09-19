@@ -26,12 +26,17 @@ export  const BookingButton = () => {
     }
 
     setError(''); // Clear previous error
-
+    console.log(date);
     const bookingData = {
+      email:"dummy123@gmail.com",
+      bookingTime:new Date(),
       date: date.map((d) => d.toISOString()),
       startTime: startTime.toISOString(),
       endTime: endTime.toISOString(),
-      reason,
+      approvalStatus:"NotApproved",
+      venue:"Fest Room",
+      reason:reason,
+      expectedStrength:"50",
     };
 
     try {

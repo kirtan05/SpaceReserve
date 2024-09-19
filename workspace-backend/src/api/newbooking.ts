@@ -5,12 +5,13 @@ const prisma = new PrismaClient();
 
 export const newBookingHandler = async (req: Request, res: Response) => {
   const { email, bookingTime, startTime, endTime, approvalStatus, venue, reason, expectedStrength } = req.body;
-
+  console.log(email,bookingTime,startTime,endTime,approvalStatus,venue,reason,expectedStrength);
+  console.log(startTime,endTime)
   try {
     const newBooking = await prisma.booking.create({
       data: {
         email,
-        bookingTime: new Date(bookingTime),
+        bookingTime: new Date(),
         startTime: new Date(startTime),
         endTime: new Date(endTime),
         approvalStatus,
