@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Select } from 'baseui/select';
 import { Venues } from './constants';
 import { DateClock } from '../components/DateClock';
+import { useBookings } from './useBookings';
 
 export const VenueSelect = ({ onBookingsFetched }) => {
   const [selectedVenue, setSelectedVenue] = useState('');
@@ -13,49 +14,18 @@ export const VenueSelect = ({ onBookingsFetched }) => {
 
   const handleDateChange = ({ date }) => {
     if (Array.isArray(date)) {
-      setSelectedDate(date);  // Ensure the date is an array
+      setSelectedDate(date);  
     } else if (date instanceof Date) {
-      setSelectedDate([date]);  // Convert single date to an array
-    }
-    console.log("Selected date:", date);  // Log the selected date to verify it's valid
-  };
-
-  const fetchBookings = async () => {
-    if (selectedVenue && selectedDate[0]) {
-      const formattedDate = selectedDate[0].toISOString().split('T')[0];
-      const venue = selectedVenue[0]?.label;
-
-      if (!venue) {
-        console.error('No venue selected');
-        return;
-      }
-
-      const url = `http://localhost:8500/api/getBookings?venue=${encodeURIComponent(venue)}&date=${formattedDate}`;
-
-      try {
-        const response = await fetch(url, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        onBookingsFetched(data);
-      } catch (error) {
-        console.error('Fetch error:', error);
-      }
+      setSelectedDate([date]);  
     }
   };
 
-  React.useEffect(() => {
-    fetchBookings();
-  }, [selectedVenue, selectedDate]);
+  const venue = selectedVenue[0]?.label;
+  const { bookings, error } = useBookings(venue, selectedDate[0]);
 
+  if (bookings) {
+    onBookingsFetched(bookings);
+  }
   return (
     <div>
       <Select
@@ -69,6 +39,7 @@ export const VenueSelect = ({ onBookingsFetched }) => {
         }))}
       />
       <DateClock value={selectedDate[0]} onDateChange={handleDateChange} />
+      {error && <div>Error fetching bookings: {error.message}</div>}
     </div>
   );
 };

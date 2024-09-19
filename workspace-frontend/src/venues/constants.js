@@ -7,23 +7,27 @@ export const Venues = {
     nssRooom: "NSS Room",
     hoscaRoom: "HOSCA ROOM (SAC)"
   };
-  export const mockBookings = [
+  export const mockBookings =[
     {
-      start: "4:30",
-      end: "6:00",
-      name: "NJACK",
-      reason: "Coding Workshop"
+        "id": "66ec907eeb2a8f9ce673a490",
+        "email": "dummy123@gmail.com",
+        "bookingTime": "2024-09-19T20:58:37.365Z",
+        "startTime": "2025-03-08T16:00:00.000Z",
+        "endTime": "2025-03-08T17:15:00.000Z",
+        "approvalStatus": "NotApproved",
+        "venue": "Fest Room",
+        "reason": "Checking123",
+        "expectedStrength": "50"
     },
     {
-      start: "8:00",
-      end: "10:00",
-      name: "SYAHI",
-      reason: "Creative Writing Meetup"
-    },
-    {
-      start: "2:00",
-      end: "3:30",
-      name: "ART CLUB",
-      reason: "Painting Session"
-    }
-  ];
+      "id": "66ec907eeb2a8f9ce673a490",
+      "email": "dummy123@gmail.com",
+      "bookingTime": "2024-09-19T20:58:37.365Z",
+      "startTime": "2025-03-08T04:00:00.000Z",
+      "endTime": "2025-03-08T05:15:00.000Z",
+      "approvalStatus": "NotApproved",
+      "venue": "Fest Room",
+      "reason": "Checking123",
+      "expectedStrength": "50"
+  }
+];
